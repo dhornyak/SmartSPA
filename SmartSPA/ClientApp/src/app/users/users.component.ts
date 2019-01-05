@@ -8,12 +8,23 @@ import { UsersService } from '../services/users.service';
   templateUrl: './users.component.html'
 })
 export class UsersComponent implements OnInit {
-  private users: Array<User>;
+  private users: User[];
 
   constructor(private usersService: UsersService) { }
 
   ngOnInit() {
-    this.users = this.usersService.getUsers();
+    this.usersService.getUsers().subscribe(result => {
+      this.users = result;
+    }, error => console.error(error));
   }
 
+  onDelete(id: number) {
+    const indexInArray = this.users.findIndex(user => user.id === id);
+
+    if (indexInArray === -1)
+      return;
+
+    this.users.splice(indexInArray, 1);
+    this.usersService.deleteUser(id).subscribe(result => { }, error => console.log(error));
+  }
 }

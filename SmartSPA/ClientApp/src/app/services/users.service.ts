@@ -1,32 +1,29 @@
+import { Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
 import { User } from '../model/User';
+import { Observable } from 'rxjs';
 
 export class UsersService {
-  private readonly users: Array<User> = [
-    new User(0, 'Adam', 'West', 'adamwest@comedycentral.com', '999F757D'),
-    new User(1, 'Peter', 'Griffin', 'petergriffin@comedycentral.com', '9DABDE30'),
-    new User(2, 'Lois', 'Griffin', 'loisgriffin@comedycentral.com', '71502D48'),
-    new User(3, 'Stewie', 'Griffin', 'stewiegriffin@comedycentral.com', '59E8996D'),
-    new User(4, 'Joe', 'Swanson', 'joeswanson@comedycentral.com', '92144D47')
-  ];
 
-  public getUsers(): Array<User> {
-    return this.users;
+  constructor(
+    private http: HttpClient,
+    @Inject('BASE_URL') private baseUrl: string) {
   }
 
-  public getUser(id: number): User {
-    return this.users[id];
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl + 'api/users');
   }
 
-  public updateUser(user: User) {
-    const i = this.users.findIndex(u => u.id === user.id);
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(this.baseUrl + 'api/users/' + id);
+  }
 
-    if (i === -1) {
-      return;
-    }
+  updateUser(user: User): Observable<Object> {
+    return this.http.put(this.baseUrl + 'api/users/' + user.id, user);
+  }
 
-    this.users[i].firstName = user.firstName;
-    this.users[i].lastName = user.lastName;
-    this.users[i].email = user.email;
-    this.users[i].hisIdentifier = user.hisIdentifier;
+  deleteUser(id: number): Observable<Object> {
+    return this.http.delete(this.baseUrl + 'api/users/' + id);
   }
 }

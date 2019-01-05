@@ -33,7 +33,7 @@ export class UserComponent implements OnInit {
     this.user.email = this.userForm.get('userData.email').value;
     this.user.hisIdentifier = this.userForm.get('userData.hisIdentifier').value;
 
-    this.usersService.updateUser(this.user);
+    this.usersService.updateUser(this.user).subscribe(result => { }, error => console.log(error));
 
     this.navigateToUsersPage();
   }

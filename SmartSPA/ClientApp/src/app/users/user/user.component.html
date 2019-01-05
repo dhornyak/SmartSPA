@@ -1,0 +1,33 @@
+<div class="row">
+  <h2>Editing user #{{ user.id }}</h2>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div formGroupName="userData">
+        <div class="form-group">
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" formControlName="firstName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last name</label>
+          <input type="text" id="lastName" formControlName="lastName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" id="email" formControlName="email" class="form-control">
+          <span *ngIf="!userForm.get('userData.email').valid && userForm.get('userData.email').touched" class="help-block">
+            Please enter a valid email!
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="hisIdentifier">HIS Identifier</label>
+          <input type="text" id="hisIdentifier" formControlName="hisIdentifier" class="form-control">
+        </div>
+      </div>
+      <span *ngIf="!userForm.valid && userForm.touched" class="help-block">Please enter valid data!</span>
+      <button [ngClass]="{'btn btn-success': true, 'disabled': !userForm.valid && userForm.touched}" type="submit">Submit</button>
+      <button class="btn btn-light ml-2" type="button" (click)="onCancel()">Cancel</button>
+    </form>
+  </div>
+</div>

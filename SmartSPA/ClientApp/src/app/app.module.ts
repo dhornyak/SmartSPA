@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { DashboardNavComponent } from './dashboard-nav/dashboard-nav.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { DashboardNavComponent } from './dashboard-nav/dashboard-nav.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    DashboardNavComponent
+    DashboardNavComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -28,6 +30,7 @@ import { DashboardNavComponent } from './dashboard-nav/dashboard-nav.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'users', component: UsersComponent }
     ])
   ],
   providers: [],

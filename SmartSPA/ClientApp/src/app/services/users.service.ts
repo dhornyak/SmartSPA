@@ -15,15 +15,15 @@ export class UsersService {
     return this.http.get<User[]>(this.baseUrl + 'api/users');
   }
 
-  getUser(id: number): Observable<User> {
+  getUser(id: string): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'api/users/' + id);
   }
 
   updateUser(user: User): Observable<Object> {
-    return this.http.put(this.baseUrl + 'api/users/' + user.id, user);
+    return this.http.put(this.baseUrl + 'api/users', user);
   }
 
-  deleteUser(id: number): Observable<Object> {
+  deleteUser(id: string): Observable<Object> {
     return this.http.delete(this.baseUrl + 'api/users/' + id);
   }
 }

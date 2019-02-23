@@ -20,10 +20,6 @@
             Please enter a valid email!
           </span>
         </div>
-        <div class="form-group">
-          <label for="hisIdentifier">HIS Identifier</label>
-          <input type="text" id="hisIdentifier" formControlName="hisIdentifier" class="form-control">
-        </div>
       </div>
       <span *ngIf="!userForm.valid && userForm.touched" class="help-block">Please enter valid data!</span>
       <button [ngClass]="{'btn btn-success': true, 'disabled': !userForm.valid && userForm.touched}" type="submit">Submit</button>

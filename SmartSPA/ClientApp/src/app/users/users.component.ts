@@ -18,7 +18,7 @@ export class UsersComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  onDelete(id: number) {
+  onDelete(id: string) {
     const indexInArray = this.users.findIndex(user => user.id === id);
 
     if (indexInArray === -1)

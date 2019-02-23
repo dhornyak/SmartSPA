@@ -1,46 +1,48 @@
 ﻿namespace SmartSPA.Controllers
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Mapster;
 
     using Microsoft.AspNetCore.Mvc;
 
+    using SmartSPA.Data;
+
     public class UsersController : Controller
     {
-        private static readonly List<UserViewModel> _users = new List<UserViewModel>
-                                                                 {
-                                                                     new UserViewModel { Id = 0, FirstName = "Adam", LastName = "West", Email = "adamwest@comedycentral.com", HisIdentifier = "999F757D" },
-                                                                     new UserViewModel { Id = 1, FirstName = "Peter", LastName = "Griffin", Email = "petergriffin@comedycentral.com", HisIdentifier = "9DABDE30" },
-                                                                     new UserViewModel { Id = 2, FirstName = "Lois", LastName = "Griffin", Email = "loisgriffin@comedycentral.com", HisIdentifier = "71502D48" },
-                                                                     new UserViewModel { Id = 3, FirstName = "Stewie", LastName = "Griffin", Email = "stewiegriffin@comedycentral.com", HisIdentifier = "59E8996D" },
-                                                                     new UserViewModel { Id = 4, FirstName = "Joe", LastName = "Swanson", Email = "joeswanson@comedycentral.com", HisIdentifier = "92144D47" }
-                                                                 };
+        private readonly ApplicationDbContext _dbContext;
+
+        public UsersController(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         [Route("api/[controller]")]
         public IEnumerable<UserViewModel> GetUsers()
         {
-            return _users;
+            return _dbContext.Users.Adapt<IEnumerable<UserViewModel>>();
         }
 
         [Route("api/[controller]/{id}")]
-        public ObjectResult GetUser(int id)
+        public async Task<ObjectResult> GetUser(string id)
         {
-            var user = _users.FirstOrDefault(u => u.Id == id);
+            var user = await _dbContext.Users.FindAsync(id);
 
             if (user == null)
                 return NotFound(id);
 
-            return new ObjectResult(user);
+            return new ObjectResult(user.Adapt<UserViewModel>());
         }
 
         [HttpPut]
-        [Route("api/[controller]/{id}")]
-        public IActionResult UpdateUser([FromBody] UserViewModel user)
+        [Route("api/[controller]")]
+        public async Task<IActionResult> UpdateUser([FromBody] UserViewModel user)
         {
             if (user == null)
                 return BadRequest();
 
-            var userToUpdate = _users.FirstOrDefault(u => u.Id == user.Id);
+            var userToUpdate = await _dbContext.Users.FindAsync(user.Id);
 
             if (userToUpdate == null)
                 return NotFound();
@@ -48,21 +50,24 @@
             userToUpdate.FirstName = user.FirstName;
             userToUpdate.LastName = user.LastName;
             userToUpdate.Email = user.Email;
-            userToUpdate.HisIdentifier = user.HisIdentifier;
+
+            _dbContext.Users.Update(userToUpdate);
+            await _dbContext.SaveChangesAsync();
 
             return Ok();
         }
 
         [HttpDelete]
         [Route("api/[controller]/{id}")]
-        public IActionResult DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = _users.FirstOrDefault(u => u.Id == id);
+            var user = await _dbContext.Users.FindAsync(id);
 
             if (user == null)
                 return NotFound(id);
 
-            _users.Remove(user);
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
 
             return Ok();
         }

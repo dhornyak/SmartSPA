@@ -31,7 +31,6 @@ export class UserComponent implements OnInit {
     this.user.firstName = this.userForm.get('userData.firstName').value;
     this.user.lastName = this.userForm.get('userData.lastName').value;
     this.user.email = this.userForm.get('userData.email').value;
-    this.user.hisIdentifier = this.userForm.get('userData.hisIdentifier').value;
 
     this.usersService.updateUser(this.user).subscribe(result => { }, error => console.log(error));
 
@@ -57,7 +56,6 @@ export class UserComponent implements OnInit {
         'firstName': new FormControl(this.user.firstName, [Validators.required]),
         'lastName': new FormControl(this.user.lastName, [Validators.required]),
         'email': new FormControl(this.user.email, [Validators.required, Validators.email]),
-        'hisIdentifier': new FormControl(this.user.hisIdentifier, [Validators.required]),
       })
     });
   }
